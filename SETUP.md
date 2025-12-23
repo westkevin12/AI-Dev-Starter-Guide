@@ -397,4 +397,45 @@ Run these commands to verify your "Gold Standard" environment is ready.
 - [ ] **Python**: `python3 --version` (Should be 3.x)
 - [ ] **Node**: `node --version` (Should be v20.x)
 
+---
+
+## Part 8: Troubleshooting
+
+Common issues and how to fix them.
+
+### 🛑 "Command not found: nvidia-smi"
+*   **Cause:** NVIDIA drivers are missing or corrupted.
+*   **Fix:**
+    ```bash
+    sudo ubuntu-drivers autoinstall
+    sudo reboot
+    ```
+
+### 🛑 Docker: "permission denied while trying to connect"
+*   **Cause:** Your user is not fully added to the `docker` group yet.
+*   **Fix:**
+    ```bash
+    # Option 1: Log out and log back in (Best)
+    # Option 2: Refresh group in current shell
+    newgrp docker
+    ```
+
+### 🛑 Git: "Authentication failed"
+*   **Cause:** The GitHub CLI token has expired or wasn't set.
+*   **Fix:**
+    ```bash
+    gh auth login
+    # Select: GitHub.com -> HTTPS -> Yes -> Login with browser
+    ```
+
+### 🛑 "python: command not found" or Wrong Version
+*   **Cause:** Pyenv paths are not loaded in your shell.
+*   **Fix:**
+    ```bash
+    source ~/.bashrc
+    ```
+    Then check again with `python --version`.
+
+---
+
 **Congratulations!** You are now ready to build the future.
