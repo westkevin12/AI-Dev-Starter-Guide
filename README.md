@@ -1,25 +1,44 @@
 # AI Development Starter Guide
 
-Welcome to the **AI Development Starter Guide**. This repository contains a comprehensive guide for setting up a professional AI development environment.
+Welcome to the **AI Development Starter Guide**. This repository contains a comprehensive guide and automated tools for setting up a professional AI development environment.
 
-## 📚 Guides in this Repo
+## 📚 Guides & Tools
 
-- **[SETUP.md](SETUP.md)**: The primary, comprehensive Markdown guide. Best for reading on GitHub.
-- **[setup_guide.ipynb](setup_guide.ipynb)**: A Jupyter Notebook version of the guide. Great for executing commands directly if you are viewing this in a notebook environment.
-
-## 🚀 What's Inside?
-
-1.  **Dual Boot OS Setup**: Windows 11 & Ubuntu Linux.
-2.  **Workspace Organization**: Professional `~/github.com/username` directory structure.
-3.  **Core Tools**: Google Antigravity IDE, Git, Node.js, Python.
-4.  **Local AI**: Running open-source LLMs locally with Ollama & Hugging Face.
-5.  **Cloud AI**: Enterprise-grade AI with Google Vertex AI.
-6.  **Creative Studio**: Generative AI workflows with ComfyUI.
+- **[install.sh](install.sh)**: The **One-Click Installer**. Automates the entire setup (System, Python, Node, Docker, Local AI, Cloud SDK, ComfyUI).
+- **[SETUP.md](SETUP.md)**: The primary, comprehensive Markdown guide. Explains every step in detail.
+- **[setup_guide.ipynb](setup_guide.ipynb)**: A Jupyter Notebook version of the guide.
+- **[WINDOWS_VIRTUALIZATION.md](WINDOWS_VIRTUALIZATION.md)**: Critical troubleshooting for Windows users needing to enable virtualization.
 
 ## 🌟 Quick Start
 
-If you are already on Ubuntu and just want the tools:
+### Step 1: Get Linux
+**You cannot run this on Windows directly.**
+Open **[SETUP.md](SETUP.md)** and follow **Part 1** to install Ubuntu (Dual Boot or VM).
 
-1.  Open `SETUP.md`.
-2.  Scroll to **Part 3: The Engine**.
-3.  Copy and run the installation commands!
+### Step 2: Run the Installer
+Once you are booted into Ubuntu:
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/westkevin12/AI-Dev-Starter-Guide.git
+    cd AI-Dev-Starter-Guide
+    ```
+2.  **Run the Installer**:
+    ```bash
+    chmod +x install.sh
+    ./install.sh
+    ```
+    *Use `--dry-run` to see what it will do without making changes.*
+
+## 📦 What gets installed?
+
+The script (and guide) sets up a "Gold Standard" environment including:
+
+1.  **Workspace**: Professional `~/github.com/username` structure.
+2.  **Core Tools**: Google Antigravity IDE, Git, GitHub CLI, Docker Engine.
+3.  **Languages**: Python 3.11 (via Pyenv), Node.js LTS (via NVM).
+4.  **Local AI**: Ollama (for running Llama 3 etc) & Hugging Face CLI.
+5.  **Cloud AI**: Google Cloud SDK & Vertex AI tools.
+6.  **Creative Studio**: ComfyUI (Environment setup).
+
+
