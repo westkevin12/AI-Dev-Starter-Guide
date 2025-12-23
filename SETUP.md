@@ -12,6 +12,11 @@ Welcome. This guide is designed to take you from a standard machine to a profess
 
 Select the **Route** that matches your hardware situation.
 
+> [!IMPORTANT]
+> **System Requirement: Virtualization**
+> All routes (even Windows-based ones) require **Virtualization** to be enabled in your BIOS/UEFI.
+> *   If you are stuck on Windows or getting errors, read our **[Windows Virtualization Guide](WINDOWS_VIRTUALIZATION.md)** first. (Note: We still **highly recommend** Native Linux).
+
 ### 🗺️ The Routes
 *   **[Route A: The Dual Boot](#route-a-the-dual-boot-windows--linux)** (Recommended for Beginners)
     *   *You have a Windows PC and want to keep Windows but run Linux for AI.*
