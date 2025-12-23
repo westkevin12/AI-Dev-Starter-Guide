@@ -2,7 +2,7 @@
 
 # =============================================================================
 # AI Development Environment Installer
-# Based on the "Gold Standard" Setup Guide
+# Compatible with: Desktop (Dual Boot/Native), Server (Headless/VM)
 # =============================================================================
 
 # Colors for pretty output
@@ -12,7 +12,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}=============================================================${NC}"
-echo -e "${BLUE}       AI Development Workstation Setup Script               ${NC}"
+echo -e "${BLUE}       Universal AI Workstation Setup Script                 ${NC}"
 echo -e "${BLUE}=============================================================${NC}"
 echo "This script will automate the installation of:"
 echo "- Essential Tools & Git Config"
