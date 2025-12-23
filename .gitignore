@@ -1,0 +1,16 @@
+# OS junk
+.DS_Store
+Thumbs.db
+*.swp
+
+# Environment
+.env
+.venv
+env/
+venv/
+__pycache__/
+
+# IDE
+.vscode/
+.idea/
+*.ipynb_checkpoints/
