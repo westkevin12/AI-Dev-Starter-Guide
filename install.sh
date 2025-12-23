@@ -184,7 +184,7 @@ install_nvm() {
     
     if [ "$DRY_RUN" = false ]; then
         export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
         execute nvm install --lts
     fi
 }
@@ -239,6 +239,66 @@ install_docker() {
     fi
 }
 
+install_ollama() {
+    log_info "Installing Ollama (Local AI)..."
+    if ! command -v ollama &> /dev/null || [ "$DRY_RUN" = true ]; then
+        if [ "$DRY_RUN" = true ]; then
+             echo "[DRY RUN] curl ... | sh"
+             echo "[DRY RUN] ollama run llama3 (Optional)"
+        else
+            curl -fsSL https://ollama.com/install.sh | sh
+            # We don't auto-run the model download as it's large, but we validte install
+        fi
+    else
+        log_success "Ollama already installed."
+    fi
+}
+
+install_gcloud() {
+    log_info "Installing Google Cloud SDK..."
+    if ! command -v gcloud &> /dev/null || [ "$DRY_RUN" = true ]; then
+        if [ "$DRY_RUN" = true ]; then
+             echo "[DRY RUN] apt install ... google-cloud-cli"
+        else
+             sudo apt install -y apt-transport-https ca-certificates gnupg
+             echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+             curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+             sudo apt update && sudo apt install -y google-cloud-cli
+        fi
+    else
+        log_success "Google Cloud SDK already installed."
+    fi
+}
+
+setup_comfyui() {
+    log_info "Setting up ComfyUI..."
+    local comfy_dir="$HOME/github.com/$GITHUB_USER/ComfyUI"
+    if [ ! -d "$comfy_dir" ]; then
+        if [ "$DRY_RUN" = true ]; then
+             echo "[DRY RUN] git clone ... $comfy_dir"
+             echo "[DRY RUN] setup venv and requirements"
+        else
+            # Clone
+            git clone https://github.com/comfyanonymous/ComfyUI "$comfy_dir"
+            
+            # Setup Venv
+            cd "$comfy_dir" || exit 1
+            python3 -m venv venv
+            # We can't strictly activate in a script subshell for future use, but we can setup
+            source venv/bin/activate
+            
+            log_info "Installing ComfyUI Dependencies (This may take a while)..."
+            pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+            pip install -r requirements.txt
+            
+            deactivate
+            cd - > /dev/null || exit
+        fi
+    else
+        log_success "ComfyUI directory exists."
+    fi
+}
+
 verify_installation() {
     if [ "$DRY_RUN" = true ]; then return; fi
     
@@ -265,6 +325,12 @@ verify_installation() {
 
     echo -n "Docker:        "
     if command -v docker &> /dev/null; then log_success "OK"; else log_error "FAIL"; fi
+
+    echo -n "Ollama:        "
+    if command -v ollama &> /dev/null; then log_success "OK"; else log_error "FAIL"; fi
+
+    echo -n "GCloud SDK:    "
+    if command -v gcloud &> /dev/null; then log_success "OK"; else log_error "FAIL"; fi
 }
 
 # =============================================================================
@@ -295,6 +361,9 @@ install_nvm
 install_gemini
 install_antigravity
 install_docker
+install_ollama
+install_gcloud
+setup_comfyui
 verify_installation
 
 echo ""
