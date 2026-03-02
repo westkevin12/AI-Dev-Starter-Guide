@@ -15,69 +15,76 @@ Select the **Route** that matches your hardware situation.
 > [!IMPORTANT]
 > **System Requirement: Virtualization**
 > All routes (even Windows-based ones) require **Virtualization** to be enabled in your BIOS/UEFI.
-> *   If you are stuck on Windows or getting errors, read our **[Windows Virtualization Guide](WINDOWS_VIRTUALIZATION.md)** first. (Note: We still **highly recommend** Native Linux).
+>
+> - If you are stuck on Windows or getting errors, read our **[Windows Virtualization Guide](WINDOWS_VIRTUALIZATION.md)** first. (Note: We still **highly recommend** Native Linux).
 
 ### 🗺️ The Routes
-*   **[Route A: The Dual Boot](#route-a-the-dual-boot-windows--linux)** (Recommended for Beginners)
-    *   *You have a Windows PC and want to keep Windows but run Linux for AI.*
-*   **[Route B: Native Linux](#route-b-native-linux-dedicated-machine)**
-    *   *You are wiping the entire computer to be a dedicated Linux machine.*
-*   **[Route C: Headless / Cloud](#route-c-headless--cloud--proxmox)**
-    *   *You are installing on a remote server, VM, or Proxmox container.*
+
+- **[Route A: The Dual Boot](#route-a-the-dual-boot-windows--linux)** (Recommended for Beginners)
+  - _You have a Windows PC and want to keep Windows but run Linux for AI._
+- **[Route B: Native Linux](#route-b-native-linux-dedicated-machine)**
+  - _You are wiping the entire computer to be a dedicated Linux machine._
+- **[Route C: Headless / Cloud](#route-c-headless--cloud--proxmox)**
+  - _You are installing on a remote server, VM, or Proxmox container._
 
 ---
 
 ### Route A: The Dual Boot (Windows + Linux)
-*Use this if you want to keep Windows available for gaming/other apps.*
+
+_Use this if you want to keep Windows available for gaming/other apps._
 
 #### Step A.1: Windows Preparation
+
 Before we touch Linux, we need to prepare your Windows system and create the installation media.
 
 1.  **Gather Hardware:**
-    *   **1x USB Drive (8GB or larger)**: This will be wiped.
-    *   **1x Dedicated SSD (NVMe or SATA)**: This is where we will install Ubuntu. *Do not try to install it on the same drive as Windows if you are a beginner.*
+    - **1x USB Drive (8GB or larger)**: This will be wiped.
+    - **1x Dedicated SSD (NVMe or SATA)**: This is where we will install Ubuntu. _Do not try to install it on the same drive as Windows if you are a beginner._
 
 2.  **Download Software:**
-    *   **Ubuntu:** Go to the [Ubuntu Desktop Download Page](https://ubuntu.com/download/desktop) and download the latest **LTS (Long Term Support)** ISO file.
-    *   **Rufus:** Go to [Rufus.ie](https://rufus.ie/) and download the portable version.
+    - **Ubuntu:** Go to the [Ubuntu Desktop Download Page](https://ubuntu.com/download/desktop) and download the latest **LTS (Long Term Support)** ISO file.
+    - **Rufus:** Go to [Rufus.ie](https://rufus.ie/) and download the portable version.
 
 3.  **Create Bootable USB:**
-    *   Plug in your USB drive.
-    *   Open **Rufus**.
-    *   **Device:** Select your USB drive.
-    *   **Boot selection:** Click "SELECT" and choose the Ubuntu ISO.
-    *   Click **START**. (Click "Yes" to prompts, and "OK" to the warning that data will be destroyed).
-    *   Wait for **READY**, then close Rufus.
+    - Plug in your USB drive.
+    - Open **Rufus**.
+    - **Device:** Select your USB drive.
+    - **Boot selection:** Click "SELECT" and choose the Ubuntu ISO.
+    - Click **START**. (Click "Yes" to prompts, and "OK" to the warning that data will be destroyed).
+    - Wait for **READY**, then close Rufus.
 
 4.  **Critical Windows Settings:**
-    *   **Disable Fast Startup** (Prevents corrupting your Windows drive):
-        *   Open Control Panel > Hardware and Sound > Power Options.
-        *   Click "Choose what the power buttons do".
-        *   Click "Change settings that are currently unavailable".
-        *   **Uncheck** "Turn on fast startup" -> Save changes.
-    *   **Disable BitLocker** (Optional but recommended):
-        *   Search for "Manage BitLocker" -> Turn Off.
+    - **Disable Fast Startup** (Prevents corrupting your Windows drive):
+      - Open Control Panel > Hardware and Sound > Power Options.
+      - Click "Choose what the power buttons do".
+      - Click "Change settings that are currently unavailable".
+      - **Uncheck** "Turn on fast startup" -> Save changes.
+    - **Disable BitLocker** (Optional but recommended):
+      - Search for "Manage BitLocker" -> Turn Off.
 
 #### Step A.2: Physical Isolation (Safety First)
+
 We use the "Physical Isolation" method. This guarantees you do not accidentally wipe Windows.
 
 1.  **Shut down** your computer completely.
 2.  Unplug the power cable.
 3.  Open your PC case.
 4.  **Unplug the SATA or Power cable** from your Windows Drive.
-    *   *If you have an M.2 NVMe drive that is hard to reach, ensure you are extremely careful in Step A.3.*
+    - _If you have an M.2 NVMe drive that is hard to reach, ensure you are extremely careful in Step A.3._
 5.  Ensure your **Target Drive** (for Ubuntu) is connected.
 
 #### Step A.3: Install Ubuntu
+
 1.  Plug in your Ubuntu USB drive.
 2.  Power on and press your **Boot Menu Key** repeatedly (F12 for Dell/Lenovo, F8 for Asus, F11 for MSI, F9 for HP).
 3.  Select your **USB Drive** -> **"Try or Install Ubuntu"**.
 4.  **Installation Type (CRITICAL):**
-    *   Since you disconnected Windows, select **"Erase disk and install Ubuntu"**.
+    - Since you disconnected Windows, select **"Erase disk and install Ubuntu"**.
 5.  Click **Install Now** -> Follow prompts for Timezone/User.
 6.  Restart -> Remove USB.
 
 #### Step A.4: Reconnect Windows
+
 1.  Shut down.
 2.  Reconnect your **Windows Drive**.
 3.  Power on -> Enter BIOS -> Set **Ubuntu** as first boot option.
@@ -85,62 +92,68 @@ We use the "Physical Isolation" method. This guarantees you do not accidentally 
 ---
 
 ### Route B: Native Linux (Dedicated Machine)
-*Use this if you are building a pure Linux workstation. WARNING: THIS WIPES THE entire drive.*
+
+_Use this if you are building a pure Linux workstation. WARNING: THIS WIPES THE entire drive._
 
 #### Step B.1: Create Installation Media
+
 1.  **Download Ubuntu:** Get the [Ubuntu LTS ISO](https://ubuntu.com/download/desktop).
 2.  **Flash USB:**
-    *   **On Windows:** Use Rufus (see Route A steps).
-    *   **On Mac/Linux:** Use [BalenaEtcher](https://etcher.balena.io/). Select ISO -> Select USB -> Flash.
+    - **On Windows:** Use Rufus (see Route A steps).
+    - **On Mac/Linux:** Use [BalenaEtcher](https://etcher.balena.io/). Select ISO -> Select USB -> Flash.
 
 #### Step B.2: The Clean Install
+
 1.  Insert USB into the target machine.
 2.  Boot and access the **Boot Menu** (F12/Delete/Esc).
 3.  Select **"Try or Install Ubuntu"**.
 4.  **Language/Keyboard:** Select English (US).
 5.  **Updates:** Check "Normal Installation" and "Install third-party software" (Graphics/WiFi drivers).
 6.  **Installation Type:** Select **"Erase disk and install Ubuntu"**.
-    *   *Note: This utilizes the entire drive for Linux.*
-    *   *Advanced:* Click "Advanced Features" -> "Use LVM" if you plan to resize partitions later.
+    - _Note: This utilizes the entire drive for Linux._
+    - _Advanced:_ Click "Advanced Features" -> "Use LVM" if you plan to resize partitions later.
 7.  **Account Setup:**
-    *   **Your Name:** (Your actual name)
-    *   **Computer Name:** (e.g., `ai-station`)
-    *   **Username:** (Keep it simple, lowercase, no spaces)
-    *   **Password:** (Strong but memorable)
+    - **Your Name:** (Your actual name)
+    - **Computer Name:** (e.g., `ai-station`)
+    - **Username:** (Keep it simple, lowercase, no spaces)
+    - **Password:** (Strong but memorable)
 8.  **Finish:** Wait for installation -> Restart -> Remove USB.
 
 ---
 
 ### Route C: Headless / Cloud / Proxmox
-*Use this for VMs, AWS/GCP Instances, or Home Lab Servers.*
+
+_Use this for VMs, AWS/GCP Instances, or Home Lab Servers._
 
 #### Step C.1: Provisioning the Instance
-*   **OS:** Select **Ubuntu Server 22.04 LTS (Jammy)** or **24.04 LTS (Noble)**.
-*   **Specs (Minimum for AI):**
-    *   **CPU:** 4 vCPUs+
-    *   **RAM:** 16GB+ (32GB recommended for LLMs)
-    *   **Storage:** 50GB+ SSD (Models are large)
-*   **Proxmox Users:**
-    *   Ensure "Host" CPU type is selected for best performance.
-    *   If passing through a GPU, verify IOMMU groups and blacklist NVIDIA drivers on the Proxmox host *before* starting the VM.
+
+- **OS:** Select **Ubuntu Server 22.04 LTS (Jammy)** or **24.04 LTS (Noble)**.
+- **Specs (Minimum for AI):**
+  - **CPU:** 4 vCPUs+
+  - **RAM:** 16GB+ (32GB recommended for LLMs)
+  - **Storage:** 50GB+ SSD (Models are large)
+- **Proxmox Users:**
+  - Ensure "Host" CPU type is selected for best performance.
+  - If passing through a GPU, verify IOMMU groups and blacklist NVIDIA drivers on the Proxmox host _before_ starting the VM.
 
 #### Step C.2: SSH Access
+
 You won't have a monitor. You will connect remotely.
 
 1.  **Get IP Address:**
-    *   Cloud: Look at your console dashboard.
-    *   Home Lab: Check your router or run `ip addr` on the VM console.
+    - Cloud: Look at your console dashboard.
+    - Home Lab: Check your router or run `ip addr` on the VM console.
 2.  **Connect:**
     ```bash
     ssh username@your-ip-address
     ```
 3.  **SSH Key (Recommended):**
-    *   On your *local* machine (not the server), run:
-        ```bash
-        ssh-keygen -t ed25519 -C "your_email@example.com"
-        ssh-copy-id username@your-ip-address
-        ```
-    *   Now you can login without a password.
+    - On your _local_ machine (not the server), run:
+      ```bash
+      ssh-keygen -t ed25519 -C "your_email@example.com"
+      ssh-copy-id username@your-ip-address
+      ```
+    - Now you can login without a password.
 
 ---
 
@@ -150,6 +163,7 @@ You won't have a monitor. You will connect remotely.
 Now you have a pristine Linux environment. Let's make it powerful.
 
 ### Step 2.1: Update Everything
+
 Open the **Terminal** application (Ctrl+Alt+T) or use your SSH session and run:
 
 ```bash
@@ -158,7 +172,9 @@ sudo apt upgrade -y
 ```
 
 ### Step 2.2: Configure Workspace
+
 We use a professional structure for your code.
+
 1. Copy this command block and paste it into Terminal (Ctrl+Shift+V):
 
 ```bash
@@ -176,6 +192,7 @@ echo "Workspace created at ~/github.com/$GITHUB_USER"
 ```
 
 ### Step 2.3: Configure Git Identity
+
 Git needs to know who you are for your commits.
 
 ```bash
@@ -185,6 +202,7 @@ git config --global init.defaultBranch main
 ```
 
 ### Step 2.4: Install GitHub CLI
+
 The official tool to login to GitHub without messing with SSH keys.
 
 ```bash
@@ -206,6 +224,7 @@ gh auth login
 ## Part 3: The Engine (Coding Tools)
 
 ### Step 3.1: Install Core Tools & Build Dependencies
+
 We need a robust set of tools to compile Python versions and run modern web apps.
 
 ```bash
@@ -213,10 +232,11 @@ We need a robust set of tools to compile Python versions and run modern web apps
 sudo apt install -y make build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
-libffi-dev liblzma-dev git
+libffi-dev liblzma-dev git zstd
 ```
 
 ### Step 3.2: Install Pyenv (Python Version Manager)
+
 Control your Python version per project. Never break your system Python again.
 
 ```bash
@@ -241,6 +261,7 @@ python --version
 ```
 
 ### Step 3.3: Install NVM (Node Version Manager)
+
 Avoid "permission denied" errors and switch Node versions easily.
 
 ```bash
@@ -260,6 +281,7 @@ node -v
 ```
 
 ### Step 3.4: Install Gemini CLI (The Command Line Brain)
+
 The Gemini CLI lets you interact with Google's large language models directly from your Terminal.
 
 ```bash
@@ -272,8 +294,9 @@ gemini configure
 ```
 
 ### Step 3.5: Install Google Antigravity IDE
+
 The official AI-first IDE by Google.
-*Note: If you are on a headless server (Route C), you might skip this or set up a remote backend.*
+_Note: If you are on a headless server (Route C), you might skip this or set up a remote backend._
 
 ```bash
 # 1. Setup Keyrings
@@ -294,6 +317,7 @@ antigravity
 ```
 
 ### Step 3.6: Install Docker Engine
+
 Docker is essential for running vector databases and containerized AI agents.
 
 ```bash
@@ -326,17 +350,19 @@ newgrp docker
 Run AI models privately on your computer.
 
 ### Step 4.0: Verify NVIDIA Drivers
+
 Before installing AI tools, ensure your GPU is recognized.
-*If you are in Route C (Proxmox), ensure your Passthrough is working first.*
+_If you are in Route C (Proxmox), ensure your Passthrough is working first._
 
 ```bash
 nvidia-smi
 ```
 
-*   **Success:** You see a grid with your GPU name and Driver Version.
-*   **Failure:** If it says "command not found", run: `sudo ubuntu-drivers autoinstall` and reboot.
+- **Success:** You see a grid with your GPU name and Driver Version.
+- **Failure:** If it says "command not found", run: `sudo ubuntu-drivers autoinstall` and reboot.
 
 ### Step 4.1: Ollama
+
 For running chat models like Llama 3.
 
 ```bash
@@ -345,6 +371,7 @@ ollama run llama3
 ```
 
 ### Step 4.2: Hugging Face
+
 For downloading models.
 
 ```bash
@@ -409,37 +436,41 @@ Run these commands to verify your "Gold Standard" environment is ready.
 Common issues and how to fix them.
 
 ### 🛑 "Command not found: nvidia-smi"
-*   **Cause:** NVIDIA drivers are missing or corrupted.
-*   **Fix:**
-    ```bash
-    sudo ubuntu-drivers autoinstall
-    sudo reboot
-    ```
+
+- **Cause:** NVIDIA drivers are missing or corrupted.
+- **Fix:**
+  ```bash
+  sudo ubuntu-drivers autoinstall
+  sudo reboot
+  ```
 
 ### 🛑 Docker: "permission denied while trying to connect"
-*   **Cause:** Your user is not fully added to the `docker` group yet.
-*   **Fix:**
-    ```bash
-    # Option 1: Log out and log back in (Best)
-    # Option 2: Refresh group in current shell
-    newgrp docker
-    ```
+
+- **Cause:** Your user is not fully added to the `docker` group yet.
+- **Fix:**
+  ```bash
+  # Option 1: Log out and log back in (Best)
+  # Option 2: Refresh group in current shell
+  newgrp docker
+  ```
 
 ### 🛑 Git: "Authentication failed"
-*   **Cause:** The GitHub CLI token has expired or wasn't set.
-*   **Fix:**
-    ```bash
-    gh auth login
-    # Select: GitHub.com -> HTTPS -> Yes -> Login with browser
-    ```
+
+- **Cause:** The GitHub CLI token has expired or wasn't set.
+- **Fix:**
+  ```bash
+  gh auth login
+  # Select: GitHub.com -> HTTPS -> Yes -> Login with browser
+  ```
 
 ### 🛑 "python: command not found" or Wrong Version
-*   **Cause:** Pyenv paths are not loaded in your shell.
-*   **Fix:**
-    ```bash
-    source ~/.bashrc
-    ```
-    Then check again with `python --version`.
+
+- **Cause:** Pyenv paths are not loaded in your shell.
+- **Fix:**
+  ```bash
+  source ~/.bashrc
+  ```
+  Then check again with `python --version`.
 
 ---
 
