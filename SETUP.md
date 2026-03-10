@@ -91,9 +91,12 @@ We use the "Physical Isolation" method. This guarantees you do not accidentally 
 
 ---
 
-### Route B: Native Linux (Dedicated Machine)
+### Route B: Native Linux (Extreme Security Tier)
 
-_Use this if you are building a pure Linux workstation. WARNING: THIS WIPES THE entire drive._
+_Use this if you are building a pure Linux workstation. This enforces **"Physical Isolation"**, the highest security standard for 2026, protecting your sensitive keys and model training data from exposure. WARNING: THIS WIPES THE entire drive._
+
+> [!TIP]
+> **For Humans vs Agents**: This route is intended for Human-operated base stations. For sovereign agents running in the cloud, refer to Route C.
 
 #### Step B.1: Create Installation Media
 
@@ -121,9 +124,12 @@ _Use this if you are building a pure Linux workstation. WARNING: THIS WIPES THE 
 
 ---
 
-### Route C: Headless / Cloud / Proxmox
+### Route C: Headless / Cloud (Standard Cloud Container)
 
-_Use this for VMs, AWS/GCP Instances, or Home Lab Servers._
+_Use this for VMs, AWS/GCP Instances, or Home Lab Servers. This represents the "Standard Cloud Container" tier._
+
+> [!TIP]
+> **1-Click Agent Provisioning**: For sovereign agents running in the cloud, you can provision "mission-ready" containers with 1-click using the Antigravity Spec-Kit `agent_mission.json` file provided in this repository. Humans should continue using the `install.sh` script or follow these manual directions.
 
 #### Step C.1: Provisioning the Instance
 
@@ -361,9 +367,14 @@ nvidia-smi
 - **Success:** You see a grid with your GPU name and Driver Version.
 - **Failure:** If it says "command not found", run: `sudo ubuntu-drivers autoinstall` and reboot.
 
-### Step 4.1: Ollama
+### Step 4.1: Ollama (Local Inference)
 
-For running chat models like Llama 3.
+For running chat models like Llama 3 privately.
+
+> [!TIP]
+> **Context Saturation (Agent-First)**: For sovereign agents, avoid installing Ollama globally in `agent_mission.json` to preserve RAM. Instead, utilize the **Agent Skills pattern** by retaining `skills/ollama/SKILL.md`. The agent will auto-equip Ollama only when tasks specifically mandate local inference.
+
+**Human Install Command:**
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
@@ -381,20 +392,66 @@ huggingface-cli login
 
 ---
 
-## Part 5: The Cloud (Vertex AI)
+## Part 5: The Cloud (Managed Agent Identities)
 
-For enterprise-grade AI applications.
+The 2026 Antigravity standard dictates that **Sovereign Agents use Workload Identity, not `.env` strings**, to access cloud resources. This enables the **Agnostic Orchestrator pattern**, where agents authenticate automatically using metadata servers rather than handling raw passwords.
+
+### Step 5.1: Install Google Cloud SDK
 
 ```bash
-# Install Google Cloud SDK
 sudo apt install -y apt-transport-https ca-certificates gnupg
 echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 sudo apt update && sudo apt install -y google-cloud-cli
 
-# Login
+# Human Login (Agents skip this)
 gcloud auth login
 ```
+
+### Step 5.2: Workload Identity Federation (For Agents)
+
+To give your agent secure access, we bind a GCP Service Account to its unique custom email address via a **Workload Identity Pool**.
+
+> [!IMPORTANT]
+> **Separation of Concerns**: Your custom domain (e.g., `YOUR_DOMAIN.com`, `digitalserverhost.com`) should use your OIDC/DEX Auth server (e.g., `auth.YOUR_DOMAIN.com`) to prove identity to GCP. However, keep your existing mail server (e.g., `mail.YOUR_DOMAIN.com` running Nginx/Roundcube) for the agents' "Human-facing" tasks (like GitHub signups). This limits the blast radius between "Identity" and "Cloud Privileges."
+
+**1. Create the Workload Identity Pool in GCP:**
+
+```bash
+# Replace YOUR_PROJECT_ID and YOUR_DOMAIN.com
+gcloud iam workload-identity-pools create agent-pool \
+    --project=YOUR_PROJECT_ID \
+    --location=global \
+    --display-name="Agent Identity Pool"
+```
+
+**2. Add your Custom Auth Provider (e.g., DEX at auth.YOUR_DOMAIN.com):**
+
+```bash
+gcloud iam workload-identity-pools providers create-oidc dex-provider \
+    --workload-identity-pool=agent-pool \
+    --issuer-uri="https://auth.YOUR_DOMAIN.com" \
+    --client-id="agent-client-id" \
+    --attribute-mapping="google.subject=assertion.sub,attribute.email=assertion.email" \
+    --project=YOUR_PROJECT_ID \
+    --location=global
+```
+
+**3. Map the Agent Email to a Service Account:**
+When an agent identifies as `custom-agent@YOUR_DOMAIN.com`, Google automatically grants it the permissions of its mapping.
+
+```bash
+gcloud iam service-accounts add-iam-policy-binding \
+    agent-sa@YOUR_PROJECT_ID.iam.gserviceaccount.com \
+    --role="roles/iam.workloadIdentityUser" \
+    --member="principalSet://iam.googleapis.com/projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPools/agent-pool/attribute.email/agent-west@YOUR_DOMAIN.com"
+```
+
+**4. Configure the Mission Variables in Antigravity:**
+In your Antigravity IDE "Settings > Mission Variables", define the following to automatically populate your `agent_mission.json` upon launch:
+
+- `GCP_WORKLOAD_IDENTITY_POOL`: `projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPools/agent-pool`
+- `GCP_PROVIDER_ID`: `dex-provider`
 
 ---
 
@@ -422,6 +479,9 @@ python main.py
 ## Part 7: Verification Checklist
 
 Run these commands to verify your "Gold Standard" environment is ready.
+
+> [!IMPORTANT]
+> **Artifact-First Verification**: In Antigravity, sovereign agents should use built-in **Artifacts** to report their environment health. This allows human operators to observe the agent verifying its own setup in the IDE’s Manager Surface rather than parsing raw terminal logs.
 
 - [ ] **NVIDIA Drivers**: `nvidia-smi` (Should show GPU info)
 - [ ] **Docker**: `docker run hello-world` (Should say "Hello from Docker!")

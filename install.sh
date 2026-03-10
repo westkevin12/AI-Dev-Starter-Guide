@@ -80,6 +80,7 @@ get_user_input() {
         GITHUB_USER="dry-run-user"
         LGIT_NAME="Dry Run User"
         LGIT_EMAIL="dryrun@example.com"
+        INSTALL_COMFYUI="n"
         return
     fi
 
@@ -87,9 +88,10 @@ get_user_input() {
     read -p "Enter your GitHub Username (for folder creation): " GITHUB_USER
     read -p "Enter your Name (for git config): " LGIT_NAME
     read -p "Enter your Email (for git config): " LGIT_EMAIL
+    read -p "Install ComfyUI? (Large download, optional) (y/n) " INSTALL_COMFYUI
 
     if [ -z "$GITHUB_USER" ] || [ -z "$LGIT_NAME" ] || [ -z "$LGIT_EMAIL" ]; then
-        log_error "All fields are required."
+        log_error "All fields except ComfyUI choice are required."
         exit 1
     fi
 }
@@ -272,6 +274,11 @@ install_gcloud() {
 }
 
 setup_comfyui() {
+    if [[ ! "$INSTALL_COMFYUI" =~ ^[Yy]$ ]]; then
+        log_info "Skipping ComfyUI installation."
+        return
+    fi
+
     log_info "Setting up ComfyUI..."
     local comfy_dir="$HOME/github.com/$GITHUB_USER/ComfyUI"
     if [ ! -d "$comfy_dir" ]; then
